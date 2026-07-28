@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>中国地图数据可视化系统</title>
-    <!-- 引入外部资源 -->
+    <!-- 引入外部资源（已全部修复BootCDN国内地址） -->
     <script src="https://cdn.bootcdn.net/ajax/libs/tailwindcss/3.4.16/tailwind.min.js"></script>
     <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/map/china.js"></script>
+    <!-- 关键修复：补全dist路径，解决地图404加载失败 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/dist/map/china.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
     <!-- Tailwind 配置 -->
     <script>
         tailwind.config = {
@@ -48,7 +50,7 @@
             }
             .hover-lift:hover {
                 transform: translateY(-5px);
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+                box-shadow: 0 8px 30px rgba(0, 0, 0.12);
             }
         }
     </style>
@@ -176,7 +178,7 @@
             <div class="bg-white rounded-xl p-6 card-shadow">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-xl font-bold">详细数据列表</h2>
-                    <label class="flex items-center bg-gray-100 rounded-lg px-4 py-2 cursor-pointer transition duration-300 hover:bg-gray-200">
+                    <label class="flex items-center bg-gray-100 rounded-lg px-4 py-2 cursor transition duration-300 hover:bg-gray-200">
                         <i class="fa fa-upload mr-2"></i>
                         <span>上传新数据</span>
                         <input type="file" id="fileUpload" accept=".xlsx, .xls" class="hidden">
@@ -195,7 +197,6 @@
                             </tr>
                         </thead>
                         <tbody id="dataTableBody" class="bg-white divide-y divide-gray-200">
-                            <!-- 数据将通过JavaScript动态填充 -->
                             <tr class="text-center">
                                 <td colspan="5" class="px-6 py-4 text-gray-500">
                                     <i class="fa fa-spinner fa-spin mr-2"></i>加载数据中...
@@ -205,7 +206,6 @@
                     </table>
                 </div>
                 
-                <!-- 数据导出按钮 -->
                 <div class="mt-6 flex justify-end">
                     <button id="exportExcelBtn" class="bg-success hover:bg-success/90 text-white px-4 py-2 rounded-lg flex items-center transition duration-300">
                         <i class="fa fa-download mr-2"></i>
@@ -262,7 +262,7 @@
         // 全局变量
         let myChart = null;
         let currentData = [];
-        // ========== 修复1：映射统一为地图原生简写（无省/自治区后缀） ==========
+        // 城市→地图简写省份映射（匹配ECharts china名称）
         const cityToProvince = {
             // 直辖市
             "北京": "北京",
@@ -276,7 +276,7 @@
             "衡阳": "湖南",
             "岳阳": "湖南",
             "常德": "湖南",
-            // 广西（桂林正确映射广西，地图可匹配）
+            // 广西
             "桂林": "广西",
             "南宁": "广西",
             "柳州": "广西",
@@ -374,7 +374,7 @@
             myChart.setOption(option);
             window.addEventListener('resize', () => myChart.resize());
         }
-        // 初始测试数据（包含桂林，修复后广西会有数值）
+        // 初始测试数据（株洲、桂林、长沙）
         function loadInitialData() {
             currentData = [
                 { "城市": "株洲", "中心名称": "株洲市中心医院", "总入组": 100, "今日入组": 5, "警报信息": "无" },
@@ -431,7 +431,7 @@
                 tableBody.appendChild(row);
             });
         }
-        // 核心：按城市映射省份，聚合省份数据（统一简写匹配）
+        // 聚合省份数据渲染地图
         function updateMapData() {
             if (!myChart) return;
             const provinceData = {};
@@ -471,7 +471,7 @@
             option.series[0].data = mapData;
             myChart.setOption(option);
         }
-        // 根据简写省份名称查询汇总数据（和mapData名称完全一致）
+        // 根据省份名称获取汇总数据
         function getProvinceData(provinceName) {
             let result = { centerCount: 0, totalEnrollment: 0, todayEnrollment: 0, alertCount: 0 };
             currentData.forEach(item => {
@@ -488,7 +488,7 @@
             });
             return result;
         }
-        // 绑定页面所有按钮、文件事件
+        // 绑定页面所有交互事件
         function bindEvents() {
             // 刷新按钮
             document.getElementById('refreshBtn').addEventListener('click', function() {
@@ -505,9 +505,9 @@
             document.getElementById('zoomInBtn').onclick = () => myChart.dispatchAction({ type: 'zoom', scale: 1.2 });
             document.getElementById('zoomOutBtn').onclick = () => myChart.dispatchAction({ type: 'zoom', scale: 0.8 });
             document.getElementById('resetMapBtn').onclick = () => myChart.dispatchAction({ type: 'restore' });
-            // 切换统计维度，重算省份数据
+            // 切换统计维度
             document.getElementById('dataTypeSelect').addEventListener('change', updateMapData);
-            // Excel上传解析 修复2：兼容「地点」「城市」双表头
+            // Excel上传解析（兼容地点/城市双表头）
             document.getElementById('fileUpload').addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (!file) return;
@@ -526,7 +526,7 @@
                             showToast('表格无有效数据', 'warning');
                             return;
                         }
-                        // 兼容旧表头 地点 → 自动转为城市字段
+                        // 兼容旧表头「地点」自动转为「城市」
                         jsonData = jsonData.map(row => {
                             const newRow = {...row};
                             if(newRow['地点'] && !newRow['城市']) {
@@ -575,7 +575,7 @@
                 if (e.target === this) this.classList.add('hidden');
             });
         }
-        // 消息提示
+        // 弹窗提示
         function showToast(message, type = 'info') {
             const toast = document.createElement('div');
             let bgColor = 'bg-gray-800', icon = 'fa-info-circle';
