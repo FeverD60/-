@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>中国地图数据可视化系统</title>
-    <!-- 兼容本地file协议 + GitHub Pages 稳定CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
-    <script src="https://mirrors.tencent.com/npm/echarts@5.4.3/dist/map/china.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <script>
@@ -23,9 +21,7 @@
                         dark: '#1D2129',
                         light: '#F2F3F5'
                     },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
                 }
             }
         }
@@ -33,23 +29,11 @@
 
     <style type="text/tailwindcss">
         @layer utilities {
-            .content-auto {
-                content-visibility: auto;
-            }
-            .map-container {
-                height: calc(100vh - 200px);
-                min-height: 600px;
-            }
-            .card-shadow {
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            }
-            .hover-lift {
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
-            .hover-lift:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-            }
+            .content-auto { content-visibility: auto; }
+            .map-container { height: calc(100vh - 200px); min-height: 600px; }
+            .card-shadow { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+            .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+            .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 8px 30px rgba(0, 0, 0.12); }
         }
     </style>
 </head>
@@ -62,17 +46,16 @@
             </div>
             <div class="flex items-center space-x-4">
                 <button id="refreshBtn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center transition duration-300">
-                    <i class="fa fa-refresh mr-2"></i>
-                    <span>刷新数据</span>
+                    <i class="fa fa-refresh mr-2"></i><span>刷新数据</span>
                 </button>
                 <button id="helpBtn" class="bg-white border border-gray-300 hover:bg-gray-100 px-4 py-2 rounded-lg flex items-center transition duration-300">
-                    <i class="fa fa-question-circle mr-2"></i>
-                    <span>帮助</span>
+                    <i class="fa fa-question-circle mr-2"></i><span>帮助</span>
                 </button>
             </div>
         </div>
     </header>
     <main class="container mx-auto px-4 py-6">
+        <!-- 统计卡片 -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div class="bg-white rounded-xl p-6 card-shadow hover-lift">
                 <div class="flex justify-between items-start mb-4">
@@ -84,10 +67,7 @@
                         <i class="fa fa-hospital-o text-xl"></i>
                     </div>
                 </div>
-                <div class="flex items-center text-sm text-gray-500">
-                    <i class="fa fa-info-circle mr-2"></i>
-                    <span>当前监控的医疗中心总数</span>
-                </div>
+                <div class="flex items-center text-sm text-gray-500"><i class="fa fa-info-circle mr-2"></i><span>当前监控的医疗中心总数</span></div>
             </div>
             <div class="bg-white rounded-xl p-6 card-shadow hover-lift">
                 <div class="flex justify-between items-start mb-4">
@@ -99,10 +79,7 @@
                         <i class="fa fa-users text-xl"></i>
                     </div>
                 </div>
-                <div class="flex items-center text-sm text-gray-500">
-                    <i class="fa fa-info-circle mr-2"></i>
-                    <span>所有中心累计入组人数</span>
-                </div>
+                <div class="flex items-center text-sm text-gray-500"><i class="fa fa-info-circle mr-2"></i><span>所有中心累计入组人数</span></div>
             </div>
             <div class="bg-white rounded-xl p-6 card-shadow hover-lift">
                 <div class="flex justify-between items-start mb-4">
@@ -114,10 +91,7 @@
                         <i class="fa fa-calendar-check-o text-xl"></i>
                     </div>
                 </div>
-                <div class="flex items-center text-sm text-gray-500">
-                    <i class="fa fa-info-circle mr-2"></i>
-                    <span>所有中心今日新增入组人数</span>
-                </div>
+                <div class="flex items-center text-sm text-gray-500"><i class="fa fa-info-circle mr-2"></i><span>所有中心今日新增入组人数</span></div>
             </div>
             <div class="bg-white rounded-xl p-6 card-shadow hover-lift">
                 <div class="flex justify-between items-start mb-4">
@@ -129,12 +103,10 @@
                         <i class="fa fa-exclamation-triangle text-xl"></i>
                     </div>
                 </div>
-                <div class="flex items-center text-sm text-gray-500">
-                    <i class="fa fa-info-circle mr-2"></i>
-                    <span>当前需要处理的警报数量</span>
-                </div>
+                <div class="flex items-center text-sm text-gray-500"><i class="fa fa-info-circle mr-2"></i><span>当前需要处理的警报数量</span></div>
             </div>
         </div>
+        <!-- 主内容区域 -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="lg:col-span-2 bg-white rounded-xl p-6 card-shadow">
                 <div class="flex justify-between items-center mb-6">
@@ -146,29 +118,20 @@
                                 <option value="todayEnrollment">按今日入组人数</option>
                                 <option value="centerCount">按中心数量</option>
                             </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                <i class="fa fa-chevron-down text-xs"></i>
-                            </div>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"><i class="fa fa-chevron-down text-xs"></i></div>
                         </div>
-                        <button id="zoomInBtn" class="bg-gray-100 hover:bg-gray-200 p-2 rounded-lg transition duration-300">
-                            <i class="fa fa-search-plus"></i>
-                        </button>
-                        <button id="zoomOutBtn" class="bg-gray-100 hover:bg-gray-200 p-2 rounded-lg transition duration-300">
-                            <i class="fa fa-search-minus"></i>
-                        </button>
-                        <button id="resetMapBtn" class="bg-gray-100 hover:bg-gray-200 p-2 rounded-lg transition duration-300">
-                            <i class="fa fa-refresh"></i>
-                        </button>
+                        <button id="zoomInBtn" class="bg-gray-100 hover:bg-gray-200 p-2 rounded-lg transition duration-300"><i class="fa fa-search-plus"></i></button>
+                        <button id="zoomOutBtn" class="bg-gray-100 hover:bg-gray-200 p-2 rounded-lg transition duration-300"><i class="fa fa-search-minus"></i></button>
+                        <button id="resetMapBtn" class="bg-gray-100 hover:bg-gray-200 p-2 rounded-lg transition duration-300"><i class="fa fa-refresh"></i></button>
                     </div>
                 </div>
-                <div id="chinaMap" class="map-container rounded-lg border border-gray-200"></div>
+                <div id="chinaMap" class="map-container rounded-lg border border-gray-200">地图加载中...</div>
             </div>
             <div class="bg-white rounded-xl p-6 card-shadow">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-xl font-bold">详细数据列表</h2>
-                    <label class="flex items-center bg-gray-100 rounded-lg px-4 py-2 cursor-pointer transition duration-300 hover:bg-gray-200">
-                        <i class="fa fa-upload mr-2"></i>
-                        <span>上传新数据</span>
+                    <label class="flex items-center bg-gray-100 rounded-lg px-4 py-2 cursor-pointer transition duration-300">
+                        <i class="fa fa-upload mr-2"></i><span>上传新数据</span>
                         <input type="file" id="fileUpload" accept=".xlsx, .xls" class="hidden">
                     </label>
                 </div>
@@ -177,58 +140,51 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">城市</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">中心名称</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">总入组</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">今日入组</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">警报信息</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500">中心名称</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500">总入组</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500">今日入组</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500">警报信息</th>
                             </tr>
                         </thead>
                         <tbody id="dataTableBody" class="bg-white divide-y divide-gray-200">
-                            <tr class="text-center">
-                                <td colspan="5" class="px-6 py-4 text-gray-500">
-                                    <i class="fa fa-spinner fa-spin mr-2"></i>加载数据中...
-                                </td>
-                            </tr>
+                            <tr class="text-center"><td colspan="5" class="px-6 py-4 text-gray-500"><i class="fa fa-spinner fa-spin mr-2"></i>加载数据中...</td></tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="mt-6 flex justify-end">
                     <button id="exportExcelBtn" class="bg-success hover:bg-success/90 text-white px-4 py-2 rounded-lg flex items-center transition duration-300">
-                        <i class="fa fa-download mr-2"></i>
-                        <span>导出当前数据</span>
+                        <i class="fa fa-download mr-2"></i><span>导出当前数据</span>
                     </button>
                 </div>
             </div>
         </div>
     </main>
+    <!-- 帮助弹窗 -->
     <div id="helpModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div class="flex justify-between items-start mb-6">
                 <h3 class="text-2xl font-bold">使用帮助</h3>
-                <button id="closeHelpModal" class="text-gray-500 hover:text-gray-700">
-                    <i class="fa fa-times text-xl"></i>
-                </button>
+                <button id="closeHelpModal" class="text-gray-500 hover:text-gray-700"><i class="fa fa-times text-xl"></i></button>
             </div>
             <div class="space-y-6">
                 <div>
-                    <h4 class="text-lg font-semibold mb-2">1. 数据可视化规则（城市映射省份）</h4>
-                    <p class="text-gray-600">表格内填写城市名称，系统自动匹配对应省份；地图按省份聚合所有下属城市的总入组、今日入组、中心数量、警报数据，颜色越深代表省份数据总量越大。</p>
+                    <h4 class="text-lg font-semibold mb-2">1. 城市映射省份</h4>
+                    <p class="text-gray-600">表格城市自动匹配省份，地图按省份汇总所有中心数据。</p>
                 </div>
                 <div>
-                    <h4 class="text-lg font-semibold mb-2">2. 数据更新</h4>
-                    <p class="text-gray-600">点击"上传新数据"按钮可以选择本地的Excel文件更新数据，系统自动将城市映射至对应省份并刷新地图、表格。</p>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-2">3. Excel表头</h4>
-                    <p class="text-gray-600">支持【城市】或者【地点】列，必填：城市、中心名称、总入组、今日入组、警报信息</p>
+                    <h4 class="text-lg font-semibold mb-2">2. Excel上传</h4>
+                    <p class="text-gray-600">支持表头「城市」或者「地点」，文件格式 xlsx/xls。</p>
                 </div>
             </div>
         </div>
     </div>
+
     <script>
         let myChart = null;
         let currentData = [];
-        // 城市映射【和echarts地图名称完全一致：不带省、自治区后缀】
+        let chinaGeo = null;
+
+        // 城市 → 简称省份映射
         const cityToProvince = {
             "北京": "北京","上海": "上海","天津": "天津","重庆": "重庆",
             "长沙": "湖南","株洲": "湖南","湘潭": "湖南","衡阳": "湖南","岳阳": "湖南","常德": "湖南",
@@ -244,37 +200,63 @@
             "西安": "陕西","宝鸡": "陕西"
         };
 
+        // 【关键修复】地图全称 → 简称对照表（匹配阿里云GeoJSON）
+        const fullNameToShort = {
+            "北京市":"北京","天津市":"天津","上海市":"上海","重庆市":"重庆",
+            "河北省":"河北","山西省":"山西","辽宁省":"辽宁","吉林省":"吉林","黑龙江省":"黑龙江",
+            "江苏省":"江苏","浙江省":"浙江","安徽省":"安徽","福建省":"福建","江西省":"江西","山东省":"山东",
+            "河南省":"河南","湖北省":"湖北","湖南省":"湖南","广东省":"广东","海南省":"海南",
+            "四川省":"四川","贵州省":"贵州","云南省":"云南","陕西省":"陕西","甘肃省":"甘肃","青海省":"青海","台湾省":"台湾",
+            "内蒙古自治区":"内蒙古","广西壮族自治区":"广西","宁夏回族自治区":"宁夏","新疆维吾尔自治区":"新疆","西藏自治区":"西藏",
+            "香港特别行政区":"香港","澳门特别行政区":"澳门"
+        };
+
+        // DOM加载完成立刻渲染表格，不等待地图
         document.addEventListener('DOMContentLoaded', function() {
-            initMap();
             loadInitialData();
             bindEvents();
+            loadChinaMapGeo(); // 异步后台加载地图
         });
+
+        // 拉取标准全国地图
+        async function loadChinaMapGeo() {
+            try {
+                const res = await fetch("https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json");
+                chinaGeo = await res.json();
+                echarts.registerMap("china", chinaGeo);
+                initMap();
+                updateMapData();
+            } catch (err) {
+                console.warn("地图加载失败：", err);
+                document.getElementById("chinaMap").innerText = "地图网络加载缓慢，表格可正常使用";
+            }
+        }
 
         function initMap() {
             myChart = echarts.init(document.getElementById('chinaMap'));
             const option = {
-                title: { show: false },
                 tooltip: {
                     trigger: 'item',
                     formatter: function(params) {
-                        const pd = getProvinceData(params.name);
+                        // 转换地图全名为简称
+                        const fullProv = params.name;
+                        const shortProv = fullNameToShort[fullProv] || fullProv;
+                        const pd = getProvinceData(shortProv);
+                        // 空数据兜底文字
                         return `
-                            <div class="font-semibold mb-1">${params.name}</div>
+                            <div class="font-semibold mb-1">${fullProv}</div>
+                            ${pd.centerCount === 0 ? '<div class="text-gray-400">暂无统计数据</div>' : `
                             <div class="text-sm">省内中心总数: ${pd.centerCount}</div>
                             <div class="text-sm">全省总入组: ${pd.totalEnrollment}</div>
                             <div class="text-sm">全省今日入组: ${pd.todayEnrollment}</div>
                             <div class="text-sm ${pd.alertCount>0?'text-red-500':''}>待处理警报: ${pd.alertCount}</div>
+                            `}
                         `;
                     }
                 },
                 visualMap: {
-                    min: 0,
-                    max: 100,
-                    left: 'left',
-                    top: 'bottom',
-                    text: ['高','低'],
-                    calculable: true,
-                    inRange: {color: ['#e0f7fa','#b2ebf2','#80deea','#4dd0e1','#26c6da','#00bcd4','#00acc1','#0097a7','#00838f']}
+                    min: 0, max: 100, left: 'left', top: 'bottom', text: ['高','低'], calculable: true,
+                    inRange: {color: ['#e0f7fa','#b2ebf2','#80deea','#4dd0e1','#26c6da','#00bcd4','#00acc1','#0097a7']}
                 },
                 series: [{
                     name:'省份数据分布',
@@ -287,25 +269,22 @@
                 }]
             };
             myChart.setOption(option);
-            window.addEventListener('resize',()=>myChart.resize());
+            window.addEventListener('resize', ()=>myChart.resize());
         }
 
+        // 初始示例数据（湖南、广西有数据）
         function loadInitialData() {
             currentData = [
                 {"城市":"株洲","中心名称":"株洲市中心医院","总入组":100,"今日入组":5,"警报信息":"无"},
                 {"城市":"长沙","中心名称":"湘雅医院","总入组":320,"今日入组":12,"警报信息":"无"},
                 {"城市":"桂林","中心名称":"桂林医学院","总入组":200,"今日入组":5,"警报信息":"样本缺失"}
             ];
-            updateUI();
-        }
-
-        function updateUI(){
             updateSummaryCards();
             updateDataTable();
-            updateMapData();
         }
 
-        function updateSummaryCards(){
+        // 更新顶部统计数字
+        function updateSummaryCards() {
             const totalCenters = currentData.length;
             const totalEnrollment = currentData.reduce((s,i)=>s+i['总入组'],0);
             const todayEnrollment = currentData.reduce((s,i)=>s+i['今日入组'],0);
@@ -316,11 +295,12 @@
             document.getElementById('alertCount').textContent = alertCount;
         }
 
-        function updateDataTable(){
+        // 更新表格
+        function updateDataTable() {
             const tbody = document.getElementById('dataTableBody');
             tbody.innerHTML = '';
             if(currentData.length===0){
-                tbody.innerHTML = `<tr class="text-center"><td colspan="5" class="px-6 py-4 text-gray-500"><i class="fa fa-info-circle mr-2"></i>暂无城市数据</td></tr>`;
+                tbody.innerHTML = `<tr class="text-center"><td colspan="5" class="px-6 py-4 text-gray-500"><i class="fa fa-info-circle mr-2"></i>暂无城市数据</td>`;
                 return;
             }
             currentData.forEach((item,idx)=>{
@@ -341,8 +321,9 @@
             })
         }
 
-        function updateMapData(){
-            if(!myChart) return;
+        // 更新地图上色数据
+        function updateMapData() {
+            if(!myChart || !chinaGeo) return;
             const provinceData = {};
             currentData.forEach(item=>{
                 const city = item['城市'];
@@ -355,15 +336,14 @@
                 provinceData[province].todayEnrollment += item['今日入组'];
                 if(item['警报信息'] && item['警报信息']!=='无') provinceData[province].alertCount +=1;
             })
+            // 把简称转回地图全称匹配series
             const mapData = [];
             let maxVal = 0;
-            const sel = document.getElementById('dataTypeSelect').value;
-            for(let p in provinceData){
-                let val = 0;
-                if(sel==='totalEnrollment') val = provinceData[p].totalEnrollment;
-                if(sel==='todayEnrollment') val = provinceData[p].todayEnrollment;
-                if(sel==='centerCount') val = provinceData[p].centerCount;
-                mapData.push({name:p,value:val});
+            // 遍历全称对照表，匹配数据
+            for(const fullName in fullNameToShort){
+                const short = fullNameToShort[fullName];
+                const val = provinceData[short]?.totalEnrollment || 0;
+                mapData.push({name: fullName, value: val});
                 if(val>maxVal) maxVal=val;
             }
             const opt = myChart.getOption();
@@ -372,11 +352,12 @@
             myChart.setOption(opt);
         }
 
-        function getProvinceData(name){
+        // 根据省份简称获取汇总数据
+        function getProvinceData(shortName) {
             const res = {centerCount:0,totalEnrollment:0,todayEnrollment:0,alertCount:0};
             currentData.forEach(item=>{
                 const p = cityToProvince[item['城市']] || '其他';
-                if(p===name){
+                if(p===shortName){
                     res.centerCount++;
                     res.totalEnrollment += item['总入组'];
                     res.todayEnrollment += item['今日入组'];
@@ -386,29 +367,30 @@
             return res;
         }
 
-        function bindEvents(){
+        // 绑定所有按钮事件
+        function bindEvents() {
             document.getElementById('refreshBtn').addEventListener('click',function(){
                 this.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i><span>刷新中...</span>';
                 this.disabled=true;
                 setTimeout(()=>{
-                    updateUI();
+                    updateSummaryCards();
+                    updateDataTable();
+                    updateMapData();
                     this.innerHTML = '<i class="fa fa-refresh mr-2"></i><span>刷新数据</span>';
                     this.disabled=false;
                     showToast('数据刷新完成','success');
                 },800)
             })
-            document.getElementById('zoomInBtn').onclick = ()=>myChart.dispatchAction({type:'zoom',scale:1.2});
-            document.getElementById('zoomOutBtn').onclick = ()=>myChart.dispatchAction({type:'zoom',scale:0.8});
-            document.getElementById('resetMapBtn').onclick = ()=>myChart.dispatchAction({type:'restore'});
+            document.getElementById('zoomInBtn').onclick = ()=>myChart&&myChart.dispatchAction({type:'zoom',scale:1.2});
+            document.getElementById('zoomOutBtn').onclick = ()=>myChart&&myChart.dispatchAction({type:'zoom',scale:0.8});
+            document.getElementById('resetMapBtn').onclick = ()=>myChart&&myChart.dispatchAction({type:'restore'});
             document.getElementById('dataTypeSelect').addEventListener('change',updateMapData);
 
+            // Excel上传解析
             document.getElementById('fileUpload').addEventListener('change',e=>{
                 const file = e.target.files[0];
                 if(!file) return;
-                if(!/\.(xlsx|xls)$/.test(file.name)){
-                    showToast('仅支持xlsx/xls文件','error');
-                    return;
-                }
+                if(!/\.(xlsx|xls)$/.test(file.name)){ showToast('仅支持xlsx/xls','error');return; }
                 const reader = new FileReader();
                 reader.onload = function(ev){
                     try{
@@ -417,52 +399,51 @@
                         const sheet = wb.Sheets[wb.SheetNames[0]];
                         let json = XLSX.utils.sheet_to_json(sheet);
                         if(json.length===0){showToast('表格无数据','warning');return;}
-                        //兼容【地点】列自动转为城市
                         json = json.map(row=>{
                             const r = {...row};
                             if(r['地点'] && !r['城市']) r['城市'] = r['地点'];
                             return r;
                         })
                         const need = ['城市','中心名称','总入组','今日入组','警报信息'];
-                        const keys = Object.keys(json[0]);
-                        if(!need.every(k=>keys.includes(k))){
-                            showToast('表格缺少必要字段','error');
-                            return;
+                        if(!need.every(k=>Object.keys(json[0]).includes(k))){
+                            showToast('表格缺少必填字段','error');return;
                         }
                         json.forEach(i=>{
                             i['总入组'] = parseInt(i['总入组'])||0;
-                            i['今日入组'] = parseInt(i['今日入组'])||0;
+                            i['今日入组'] = parseInt(i['总入组'])||0;
                             i['警报信息'] = i['警报信息']||'无';
                         })
                         currentData = json;
-                        updateUI();
+                        updateSummaryCards();
+                        updateDataTable();
+                        updateMapData();
                         e.target.value = '';
-                        showToast(`成功导入${json.length}条数据`,'success');
-                    }catch(err){
-                        showToast('读取表格失败：'+err.message,'error');
-                    }
+                        showToast(`导入${json.length}条数据`,'success');
+                    }catch(err){ showToast('读取表格失败','error'); }
                 }
                 reader.readAsArrayBuffer(file);
             })
 
+            // 导出Excel
             document.getElementById('exportExcelBtn').onclick = function(){
                 if(currentData.length===0) return showToast('暂无数据','warning');
                 const sheet = XLSX.utils.json_to_sheet(currentData);
                 const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb,sheet,"城市明细");
+                XLSX.utils.book_append_sheet(wb,"城市明细");
                 const d = new Date();
-                const name = `城市数据_${d.getFullYear()}${(d.getMonth()+1).toString().padStart(2,'0')}${d.getDate().toString().padStart(2,'0')}.xlsx`;
-                XLSX.writeFile(wb,name);
+                const fname = `城市数据_${d.getFullYear()}${(d.getMonth()+1).padStart(2,'0')}${d.getDate().padStart(2,'0')}`;
+                XLSX.writeFile(wb,fname+".xlsx");
                 showToast('导出完成','success');
             }
 
             document.getElementById('helpBtn').onclick = ()=>document.getElementById('helpModal').classList.remove('hidden');
             document.getElementById('closeHelpModal').onclick = ()=>document.getElementById('helpModal').classList.add('hidden');
             document.getElementById('helpModal').addEventListener('click',ev=>{
-                if(ev.target === this) document.getElementById('helpModal').classList.add('hidden');
+                if(ev.target === document.getElementById('helpModal')) document.getElementById('helpModal').classList.add('hidden');
             })
         }
 
+        // 提示弹窗
         function showToast(msg,type='info'){
             const div = document.createElement('div');
             let bg = 'bg-gray-800',icon='fa-info-circle';
@@ -473,10 +454,7 @@
             div.innerHTML = `<i class="fa ${icon} mr-2"></i><span>${msg}</span>`;
             document.body.appendChild(div);
             setTimeout(()=>div.classList.remove('translate-y-20','opacity-0'),10);
-            setTimeout(()=>{
-                div.classList.add('translate-y-20','opacity-0');
-                setTimeout(()=>div.remove(),300);
-            },3000)
+            setTimeout(()=>{div.classList.add('translate-y-20','opacity-0');setTimeout(()=>div.remove(),3000);},3000)
         }
     </script>
 </body>
